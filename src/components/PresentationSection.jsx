@@ -6,6 +6,7 @@ import {
   Eye, 
   EyeOff, 
   Sparkles,
+  Tv2,
   Home,
   LayoutGrid,
   Armchair,
@@ -16,6 +17,7 @@ import {
   Clock,
   Shirt
 } from 'lucide-react';
+import AnalogRoutineClock from './AnalogRoutineClock';
 
 const iconMap = {
   Home,
@@ -32,7 +34,8 @@ const iconMap = {
 
 export default function PresentationSection({ 
   section, 
-  highlightVerbs
+  highlightVerbs,
+  onOpenSlides
 }) {
   const [copiedId, setCopiedId] = useState(null);
   const [hiddenCards, setHiddenCards] = useState({});
@@ -99,7 +102,21 @@ export default function PresentationSection({
               {section.description}
             </p>
           </div>
+
+          {/* Section Slides Trigger Button */}
+          <button
+            onClick={() => onOpenSlides(section)}
+            className={`self-start md:self-auto flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold border transition-all ${colors.badge} hover:scale-[1.02] active:scale-[0.98] shadow-md`}
+          >
+            <Tv2 className="w-4 h-4" />
+            <span>Present {section.navLabel} Slides ({section.cards.length})</span>
+          </button>
         </div>
+
+        {/* Interactive Analog Routine Clock in Section 2 */}
+        {section.id === 'freetime' && (
+          <AnalogRoutineClock highlightVerbs={highlightVerbs} />
+        )}
 
         {/* Cards Grid */}
         <div className={`grid grid-cols-1 ${section.cards.length === 4 ? 'sm:grid-cols-2 lg:grid-cols-4' : 'sm:grid-cols-3'} gap-5`}>

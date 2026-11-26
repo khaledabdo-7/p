@@ -11,17 +11,20 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function PresenterModal({ 
-  isOpen, 
-  onClose, 
-  cards 
+  activeSection,
+  allSections,
+  onSelectSection,
+  onClose
 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [highlightVerbs, setHighlightVerbs] = useState(true);
   const [copied, setCopied] = useState(false);
 
+  const cards = activeSection?.cards || [];
+
   // Keyboard navigation
   useEffect(() => {
-    if (!isOpen) return;
+    if (!activeSection) return;
 
     const handleKeyDown = (e) => {
       if (e.key === 'ArrowRight' || e.key === 'Space') {
@@ -37,9 +40,9 @@ export default function PresenterModal({
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, cards.length, onClose]);
+  }, [activeSection, cards.length, onClose]);
 
-  if (!isOpen) return null;
+  if (!activeSection || cards.length === 0) return null;
 
   const currentCard = cards[currentIndex];
   const progressPercent = ((currentIndex + 1) / cards.length) * 100;
@@ -65,7 +68,7 @@ export default function PresenterModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-xl p-4 sm:p-6 md:p-10">
       
-      {/* Top progress bar */}
+      {/* Top progress bar for this specific section */}
       <div className="absolute top-0 left-0 right-0 h-1.5 bg-slate-800">
         <div 
           className="h-full bg-gradient-to-r from-indigo-500 via-emerald-400 to-amber-400 transition-all duration-300"
@@ -73,25 +76,48 @@ export default function PresenterModal({
         />
       </div>
 
-      <div className="relative w-full max-w-4xl bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl flex flex-col overflow-hidden max-h-[90vh]">
+      <div className="relative w-full max-w-4xl bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl flex flex-col overflow-hidden max-h-[92vh]">
         
-        {/* Modal Top Bar */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-950/50">
-          <div className="flex items-center gap-3">
-            <span className="flex items-center gap-1.5 text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+        {/* Modal Top Bar: Topic Switcher Tabs + Controls */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between px-6 py-3.5 border-b border-slate-800 bg-slate-950/60 gap-3">
+          
+          {/* Section Tabs: Lets Khaled switch between topics without leaving modal */}
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+            {allSections.map((sec) => {
+              const isActive = sec.id === activeSection.id;
+              return (
+                <button
+                  key={sec.id}
+                  onClick={() => {
+                    setCurrentIndex(0);
+                    onSelectSection(sec);
+                  }}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
+                    isActive
+                      ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
+                      : 'bg-slate-800/80 hover:bg-slate-700 text-slate-300'
+                  }`}
+                >
+                  <span>{sec.navLabel}</span>
+                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${isActive ? 'bg-indigo-700 text-white' : 'bg-slate-700 text-slate-400'}`}>
+                    {sec.cards.length}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="flex items-center justify-between sm:justify-end gap-2">
+            {/* Slide Count Indicator for current section */}
+            <span className="flex items-center gap-1.5 text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-slate-800 text-indigo-300 border border-slate-700">
               <Tv2 className="w-3.5 h-3.5" />
               SLIDE {currentIndex + 1} OF {cards.length}
             </span>
-            <span className="text-xs text-slate-400 hidden sm:inline">
-              {currentCard.sectionTitle}
-            </span>
-          </div>
 
-          <div className="flex items-center gap-2">
             {/* Verb Toggle */}
             <button
               onClick={() => setHighlightVerbs(!highlightVerbs)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-semibold border transition-all ${
                 highlightVerbs
                   ? 'bg-amber-500/20 border-amber-500/40 text-amber-300'
                   : 'bg-slate-800 border-slate-700 text-slate-400'
@@ -125,15 +151,15 @@ export default function PresenterModal({
         <div className="p-8 sm:p-12 md:p-16 flex-1 flex flex-col justify-center text-center overflow-y-auto">
           <AnimatePresence mode="wait">
             <motion.div
-              key={currentCard.id}
+              key={`${activeSection.id}-${currentCard.id}`}
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.25 }}
+              transition={{ duration: 0.22 }}
               className="space-y-6"
             >
-              <div className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-slate-800 text-slate-300 border border-slate-700 mb-2 font-mono">
-                {currentCard.sectionTitle} • Card {currentCard.cardNumber}
+              <div className="inline-block px-3.5 py-1 rounded-full text-xs font-semibold bg-indigo-950/70 text-indigo-300 border border-indigo-700/40 font-mono">
+                {activeSection.title} • Card {currentCard.cardNumber}
               </div>
 
               {/* Slide Card Heading */}
@@ -189,18 +215,18 @@ export default function PresenterModal({
             <span>Previous</span>
           </button>
 
-          {/* Quick jump slide indicators */}
-          <div className="hidden sm:flex items-center gap-1.5">
+          {/* Quick jump slide indicators for this section */}
+          <div className="flex items-center gap-2">
             {cards.map((c, idx) => (
               <button
                 key={c.id}
                 onClick={() => setCurrentIndex(idx)}
-                className={`w-2.5 h-2.5 rounded-full transition-all ${
+                className={`transition-all rounded-full ${
                   idx === currentIndex 
-                    ? 'w-6 bg-indigo-500' 
-                    : 'bg-slate-700 hover:bg-slate-600'
+                    ? 'w-7 h-2.5 bg-indigo-500 shadow-sm shadow-indigo-500/50' 
+                    : 'w-2.5 h-2.5 bg-slate-700 hover:bg-slate-600'
                 }`}
-                title={`Card: ${c.title}`}
+                title={`Card ${c.cardNumber}: ${c.title}`}
               />
             ))}
           </div>

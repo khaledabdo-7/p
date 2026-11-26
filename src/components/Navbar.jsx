@@ -13,7 +13,7 @@ export default function Navbar({
   activeSection, 
   highlightVerbs, 
   setHighlightVerbs, 
-  setIsSlideMode
+  onOpenCurrentSlides
 }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -116,20 +116,20 @@ export default function Navbar({
 
           {/* Slide Deck Presenter Mode */}
           <button
-            onClick={() => setIsSlideMode(true)}
+            onClick={onOpenCurrentSlides}
             className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white shadow-md shadow-indigo-600/25 transition-all hover:scale-[1.02] active:scale-[0.98]"
           >
             <Tv2 className="w-3.5 h-3.5" />
-            <span>Present Slides</span>
+            <span>Present Section Slides</span>
           </button>
         </div>
 
         {/* Mobile Menu Button */}
         <div className="flex sm:hidden items-center gap-2">
           <button
-            onClick={() => setIsSlideMode(true)}
+            onClick={onOpenCurrentSlides}
             className="p-2 rounded-xl bg-indigo-600 text-white text-xs font-medium"
-            title="Slide Mode"
+            title="Present Current Section Slides"
           >
             <Tv2 className="w-4 h-4" />
           </button>

@@ -4,12 +4,12 @@ import HeroSection from './components/HeroSection';
 import PresentationSection from './components/PresentationSection';
 import PresenterModal from './components/PresenterModal';
 import Footer from './components/Footer';
-import { presentationData, allCards } from './data/presentationData';
+import { presentationData } from './data/presentationData';
 
 export default function App() {
   const [activeSection, setActiveSection] = useState('house');
   const [highlightVerbs, setHighlightVerbs] = useState(true);
-  const [isSlideMode, setIsSlideMode] = useState(false);
+  const [activeSlideSection, setActiveSlideSection] = useState(null);
 
   // Active section tracking using IntersectionObserver
   useEffect(() => {
@@ -36,6 +36,11 @@ export default function App() {
     return () => observer.disconnect();
   }, []);
 
+  const handleOpenCurrentSlides = () => {
+    const current = presentationData.sections.find((s) => s.id === activeSection) || presentationData.sections[0];
+    setActiveSlideSection(current);
+  };
+
   return (
     <div className="min-h-screen bg-[#090d1a] text-slate-100 font-sans selection:bg-indigo-500 selection:text-white">
       {/* Sticky Glass Navbar */}
@@ -43,37 +48,40 @@ export default function App() {
         activeSection={activeSection}
         highlightVerbs={highlightVerbs}
         setHighlightVerbs={setHighlightVerbs}
-        setIsSlideMode={setIsSlideMode}
+        onOpenCurrentSlides={handleOpenCurrentSlides}
       />
 
       {/* Main Content */}
       <main>
-        {/* Hero Section */}
+        {/* Hero Section with Section-Specific Slide Starters */}
         <HeroSection 
           data={presentationData.hero}
-          onStartSlides={() => setIsSlideMode(true)}
+          sections={presentationData.sections}
+          onOpenSlides={(sec) => setActiveSlideSection(sec)}
         />
 
-        {/* 3 Main Sections */}
+        {/* 3 Main Presentation Sections with their Own Slide Starters */}
         {presentationData.sections.map((section) => (
           <PresentationSection
             key={section.id}
             section={section}
             highlightVerbs={highlightVerbs}
+            onOpenSlides={(sec) => setActiveSlideSection(sec)}
           />
         ))}
       </main>
 
-      {/* Slide Deck Presenter Modal */}
+      {/* Section-Specific Slide Deck Presenter Modal */}
       <PresenterModal
-        isOpen={isSlideMode}
-        onClose={() => setIsSlideMode(false)}
-        cards={allCards}
+        activeSection={activeSlideSection}
+        allSections={presentationData.sections}
+        onSelectSection={(sec) => setActiveSlideSection(sec)}
+        onClose={() => setActiveSlideSection(null)}
       />
 
       {/* Clean Footer */}
       <Footer 
-        onStartSlides={() => setIsSlideMode(true)} 
+        onStartSlides={() => setActiveSlideSection(presentationData.sections[0])} 
       />
     </div>
   );

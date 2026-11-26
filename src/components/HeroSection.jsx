@@ -4,7 +4,8 @@ import { Tv2, Sparkles } from 'lucide-react';
 
 export default function HeroSection({ 
   data, 
-  onStartSlides 
+  sections,
+  onOpenSlides 
 }) {
   return (
     <section id="hero" className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
@@ -48,21 +49,23 @@ export default function HeroSection({
           "{data.subtitle}"
         </motion.p>
 
-        {/* Interactive Action Button */}
+        {/* Interactive Action Buttons */}
         <motion.div 
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
           className="flex flex-wrap items-center justify-center gap-3.5 mb-14"
         >
-          {/* Present Slides Button */}
-          <button
-            onClick={onStartSlides}
-            className="flex items-center gap-2.5 px-7 py-3.5 rounded-2xl font-semibold text-base bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white shadow-lg shadow-indigo-600/30 hover:scale-[1.02] active:scale-[0.98] transition-all"
-          >
-            <Tv2 className="w-5 h-5" />
-            <span>Start Slide Deck</span>
-          </button>
+          {sections.map((sec) => (
+            <button
+              key={sec.id}
+              onClick={() => onOpenSlides(sec)}
+              className="flex items-center gap-2 px-5 py-3 rounded-2xl font-semibold text-sm bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-indigo-500/50 text-white shadow-md transition-all hover:scale-[1.02] active:scale-[0.98]"
+            >
+              <Tv2 className="w-4 h-4 text-indigo-400" />
+              <span>Present {sec.navLabel} ({sec.cards.length})</span>
+            </button>
+          ))}
         </motion.div>
 
         {/* 3 Quick Navigation Cards */}
