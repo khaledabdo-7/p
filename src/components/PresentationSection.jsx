@@ -18,6 +18,7 @@ import {
   Shirt
 } from 'lucide-react';
 import AnalogRoutineClock from './AnalogRoutineClock';
+import HouseSplitCards from './HouseSplitCards';
 
 const iconMap = {
   Home,
@@ -113,12 +114,18 @@ export default function PresentationSection({
           </button>
         </div>
 
+        {/* Section 1: Interactive Split Cards */}
+        {section.id === 'house' && (
+          <HouseSplitCards highlightVerbs={highlightVerbs} />
+        )}
+
         {/* Interactive Analog Routine Clock in Section 2 */}
         {section.id === 'freetime' && (
           <AnalogRoutineClock highlightVerbs={highlightVerbs} />
         )}
 
-        {/* Cards Grid */}
+        {/* Cards Grid (only for Section 3: Event) */}
+        {section.id !== 'house' && section.id !== 'freetime' && (
         <div className={`grid grid-cols-1 ${section.cards.length === 4 ? 'sm:grid-cols-2 lg:grid-cols-4' : 'sm:grid-cols-3'} gap-5`}>
           {section.cards.map((card, idx) => {
             const Icon = iconMap[card.icon] || Home;
@@ -219,6 +226,7 @@ export default function PresentationSection({
             );
           })}
         </div>
+        )}
 
       </div>
     </section>
