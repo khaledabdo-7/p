@@ -165,55 +165,66 @@ export default function AnalogRoutineClock({ highlightVerbs = true }) {
     return { deg, dist: Math.sqrt(dx * dx + dy * dy) };
   };
 
-  // Pointer down: decide if dragging minute hand, hour hand, or clock dial
+  // Pointer down: decide if dragging minute hand or hour hand
   const handlePointerDown = (e) => {
+    // Prevent default touch gestures like scrolling
+    if (e.cancelable && e.type.startsWith('touch')) {
+      e.preventDefault();
+    }
     const info = getAngleFromEvent(e);
     if (!info) return;
 
-    // Radius of clock face is ~130px.
-    // Inner area (< 65px) or near hour angle -> hour hand
-    // Outer area (> 65px) -> minute hand
+    // Distinguish between hour hand (inner area or near hour angle) and minute hand (outer area)
+    const diffHour = Math.min(Math.abs(info.deg - hourAngle), 360 - Math.abs(info.deg - hourAngle));
+    const diffMin = Math.min(Math.abs(info.deg - minuteAngle), 360 - Math.abs(info.deg - minuteAngle));
+
     let target = 'minute';
-    if (info.dist < 75) {
+    if (info.dist < 80 || diffHour < 25) {
       target = 'hour';
-    } else {
-      // Check proximity to hour angle vs minute angle
-      const diffHour = Math.min(Math.abs(info.deg - hourAngle), 360 - Math.abs(info.deg - hourAngle));
-      const diffMin = Math.min(Math.abs(info.deg - minuteAngle), 360 - Math.abs(info.deg - minuteAngle));
-      target = diffHour < diffMin && diffHour < 35 ? 'hour' : 'minute';
+    } else if (diffMin < 35 || info.dist >= 80) {
+      target = 'minute';
     }
 
     setActiveDragTarget(target);
     prevAngleRef.current = info.deg;
   };
 
-  // Pointer move: update time with full 24-hour rollover
+  // Pointer move: direct, instantaneous angle tracking with 24-hour rollover
   const handlePointerMove = (e) => {
     if (!activeDragTarget) return;
     const info = getAngleFromEvent(e);
     if (!info || prevAngleRef.current === null) return;
 
-    let delta = info.deg - prevAngleRef.current;
-    // Handle wrap around 0 / 360 boundary
-    if (delta > 180) delta -= 360;
-    if (delta < -180) delta += 360;
-
-    prevAngleRef.current = info.deg;
+    const prevAngle = prevAngleRef.current;
+    const currAngle = info.deg;
 
     if (activeDragTarget === 'minute') {
-      // 1 full revolution of minute hand (360 deg) = 60 minutes = 1 hour
-      // 6 deg = 1 minute
-      const deltaMins = Math.round(delta / 6);
-      if (deltaMins !== 0) {
-        setTotalMinutes((prev) => {
-          let updated = (prev + deltaMins) % 1440;
-          if (updated < 0) updated += 1440;
-          return updated;
-        });
+      // Direct minute hand tracking: 1 minute = 6 degrees
+      const newMinute = Math.round(currAngle / 6) % 60;
+
+      // Check crossing of 12 o'clock (0° / 360°)
+      let hourChange = 0;
+      if (prevAngle > 300 && currAngle < 60) {
+        hourChange = 1; // Clockwise past 12
+      } else if (prevAngle < 60 && currAngle > 300) {
+        hourChange = -1; // Counter-clockwise past 12
       }
+
+      setTotalMinutes((prev) => {
+        const curHour = Math.floor(prev / 60);
+        let nextHour = (curHour + hourChange) % 24;
+        if (nextHour < 0) nextHour += 24;
+        return nextHour * 60 + newMinute;
+      });
+
+      prevAngleRef.current = currAngle;
     } else if (activeDragTarget === 'hour') {
-      // 1 full revolution of hour hand (360 deg) = 12 hours = 720 minutes
-      // 30 deg = 60 minutes -> 1 deg = 2 minutes
+      // Direct hour hand tracking
+      let delta = currAngle - prevAngle;
+      if (delta > 180) delta -= 360;
+      if (delta < -180) delta += 360;
+
+      // 30 degrees = 1 hour = 60 minutes -> 1 deg = 2 minutes
       const deltaMins = Math.round(delta * 2);
       if (deltaMins !== 0) {
         setTotalMinutes((prev) => {
@@ -221,6 +232,7 @@ export default function AnalogRoutineClock({ highlightVerbs = true }) {
           if (updated < 0) updated += 1440;
           return updated;
         });
+        prevAngleRef.current = currAngle;
       }
     }
   };
@@ -230,15 +242,29 @@ export default function AnalogRoutineClock({ highlightVerbs = true }) {
     prevAngleRef.current = null;
   };
 
-  // Global pointer up listener
+  const handlePointerMoveRef = useRef(handlePointerMove);
   useEffect(() => {
-    const handleGlobalUp = () => {
-      setActiveDragTarget(null);
-      prevAngleRef.current = null;
+    handlePointerMoveRef.current = handlePointerMove;
+  });
+
+  // Global pointer move & up listener while dragging
+  useEffect(() => {
+    if (!activeDragTarget) return;
+
+    const onMove = (e) => {
+      if (handlePointerMoveRef.current) {
+        handlePointerMoveRef.current(e);
+      }
     };
-    window.addEventListener('pointerup', handleGlobalUp);
-    return () => window.removeEventListener('pointerup', handleGlobalUp);
-  }, []);
+    const onUp = () => handlePointerUp();
+
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+    return () => {
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+    };
+  }, [activeDragTarget]);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(`${activeCard.title}: ${activeCard.text}`);
