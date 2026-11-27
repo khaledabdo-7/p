@@ -63,7 +63,7 @@ export default function HeroSection({
               className="flex items-center gap-2 px-5 py-3 rounded-2xl font-semibold text-sm bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-indigo-500/50 text-white shadow-md transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
               <Tv2 className="w-4 h-4 text-indigo-400" />
-              <span>Present {sec.navLabel} ({sec.cards.length})</span>
+              <span>{sec.navLabel} ({sec.cards.length})</span>
             </button>
           ))}
         </motion.div>
