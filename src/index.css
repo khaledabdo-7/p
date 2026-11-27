@@ -85,3 +85,116 @@
 .glow-emerald {
   box-shadow: 0 0 25px -4px rgba(110, 231, 183, 0.3);
 }
+
+/* =========================================================
+   HIGH-CONTRAST PROJECTOR / LIGHT MODE (html.projector-mode)
+   ========================================================= */
+html.projector-mode body,
+html.projector-mode .bg-\[\#090d1a\] {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+html.projector-mode .glass-nav {
+  background: rgba(255, 255, 255, 0.94) !important;
+  border-bottom: 1px solid #cbd5e1 !important;
+}
+
+html.projector-mode .bg-slate-900,
+html.projector-mode .bg-slate-900\/85,
+html.projector-mode .bg-slate-900\/80,
+html.projector-mode .bg-slate-900\/75,
+html.projector-mode .bg-slate-900\/70,
+html.projector-mode .bg-slate-900\/60,
+html.projector-mode .bg-\[\#111827\] {
+  background-color: #ffffff !important;
+  background-image: none !important;
+  box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.12) !important;
+}
+
+html.projector-mode .bg-slate-950,
+html.projector-mode .bg-slate-950\/90,
+html.projector-mode .bg-slate-950\/85,
+html.projector-mode .bg-slate-950\/80,
+html.projector-mode .bg-slate-950\/75,
+html.projector-mode .bg-slate-950\/70,
+html.projector-mode .bg-slate-950\/60,
+html.projector-mode .bg-slate-950\/50,
+html.projector-mode .bg-slate-950\/40 {
+  background-color: #f1f5f9 !important;
+  background-image: none !important;
+}
+
+html.projector-mode .bg-slate-800,
+html.projector-mode .bg-slate-800\/80,
+html.projector-mode .bg-slate-800\/60 {
+  background-color: #e2e8f0 !important;
+}
+
+html.projector-mode .bg-indigo-950\/80,
+html.projector-mode .bg-indigo-950\/70,
+html.projector-mode .bg-amber-950\/80,
+html.projector-mode .bg-amber-950\/70,
+html.projector-mode .bg-emerald-950\/80,
+html.projector-mode .bg-emerald-950\/40,
+html.projector-mode .bg-blue-950\/80 {
+  background-color: #eef2ff !important;
+}
+
+html.projector-mode .text-white,
+html.projector-mode .text-slate-100,
+html.projector-mode .text-slate-200 {
+  color: #0f172a !important;
+}
+
+html.projector-mode .bg-indigo-600,
+html.projector-mode .bg-indigo-600 *,
+html.projector-mode .bg-emerald-600,
+html.projector-mode .bg-emerald-600 *,
+html.projector-mode .bg-purple-600,
+html.projector-mode .bg-purple-600 *,
+html.projector-mode .bg-rose-600,
+html.projector-mode .bg-rose-600 * {
+  color: #ffffff !important;
+}
+
+html.projector-mode .text-slate-300,
+html.projector-mode .text-slate-400,
+html.projector-mode .text-slate-500 {
+  color: #334155 !important;
+}
+
+html.projector-mode .text-indigo-300,
+html.projector-mode .text-indigo-400 {
+  color: #4338ca !important;
+}
+
+html.projector-mode .text-emerald-300,
+html.projector-mode .text-emerald-400,
+html.projector-mode .text-emerald-200 {
+  color: #047857 !important;
+}
+
+html.projector-mode .text-amber-300,
+html.projector-mode .text-amber-400,
+html.projector-mode .text-amber-200 {
+  color: #b45309 !important;
+}
+
+html.projector-mode .bg-amber-400\/10 {
+  background-color: #fef3c7 !important;
+}
+
+html.projector-mode .border-slate-800,
+html.projector-mode .border-slate-800\/80,
+html.projector-mode .border-slate-800\/60,
+html.projector-mode .border-slate-700,
+html.projector-mode .border-slate-700\/80 {
+  border-color: #cbd5e1 !important;
+}
+
+html.projector-mode .from-slate-900.via-\[\#0a0f1d\] {
+  background: radial-gradient(circle, #ffffff 0%, #e2e8f0 100%) !important;
+  border-color: #94a3b8 !important;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.15) !important;
+}

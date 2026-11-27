@@ -9,7 +9,13 @@ import { presentationData } from './data/presentationData';
 export default function App() {
   const [activeSection, setActiveSection] = useState('house');
   const [highlightVerbs, setHighlightVerbs] = useState(true);
+  const [isProjectorMode, setIsProjectorMode] = useState(false);
   const [activeSlideSection, setActiveSlideSection] = useState(null);
+
+  // Toggle high-contrast projector mode class on root element
+  useEffect(() => {
+    document.documentElement.classList.toggle('projector-mode', isProjectorMode);
+  }, [isProjectorMode]);
 
   // Active section tracking using IntersectionObserver
   useEffect(() => {
@@ -48,6 +54,8 @@ export default function App() {
         activeSection={activeSection}
         highlightVerbs={highlightVerbs}
         setHighlightVerbs={setHighlightVerbs}
+        isProjectorMode={isProjectorMode}
+        setIsProjectorMode={setIsProjectorMode}
         onOpenCurrentSlides={handleOpenCurrentSlides}
       />
 

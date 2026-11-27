@@ -6,13 +6,17 @@ import {
   Sparkles, 
   Tv2, 
   Menu, 
-  X
+  X,
+  Sun,
+  Moon
 } from 'lucide-react';
 
 export default function Navbar({ 
   activeSection, 
   highlightVerbs, 
   setHighlightVerbs, 
+  isProjectorMode,
+  setIsProjectorMode,
   onOpenCurrentSlides
 }) {
   const [scrolled, setScrolled] = useState(false);
@@ -100,6 +104,20 @@ export default function Navbar({
 
         {/* Action Controls */}
         <div className="hidden sm:flex items-center gap-2.5">
+          {/* Projector Light / Dark Mode Toggle */}
+          <button
+            onClick={() => setIsProjectorMode(!isProjectorMode)}
+            title="Switch between Dark Mode and High-Contrast Projector Mode"
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
+              isProjectorMode
+                ? 'bg-amber-500 border-amber-400 text-slate-950 shadow-sm'
+                : 'bg-slate-900/60 border-slate-800 text-slate-300 hover:text-white'
+            }`}
+          >
+            {isProjectorMode ? <Moon className="w-3.5 h-3.5" /> : <Sun className="w-3.5 h-3.5 text-amber-400" />}
+            <span>{isProjectorMode ? 'Dark' : 'Projector'}</span>
+          </button>
+
           {/* Verb Highlight Toggle */}
           <button
             onClick={() => setHighlightVerbs(!highlightVerbs)}
@@ -164,7 +182,7 @@ export default function Navbar({
             })}
           </div>
 
-          <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+          <div className="pt-2 border-t border-slate-800 flex items-center justify-between gap-2">
             <button
               onClick={() => setHighlightVerbs(!highlightVerbs)}
               className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium border ${
@@ -173,6 +191,18 @@ export default function Navbar({
             >
               <Sparkles className="w-4 h-4" />
               <span>{highlightVerbs ? 'Verbs Highlighted' : 'Highlight Verbs'}</span>
+            </button>
+
+            <button
+              onClick={() => setIsProjectorMode(!isProjectorMode)}
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border ${
+                isProjectorMode
+                  ? 'bg-amber-500 border-amber-400 text-slate-950'
+                  : 'border-slate-700 text-slate-300'
+              }`}
+            >
+              {isProjectorMode ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4 text-amber-400" />}
+              <span>{isProjectorMode ? 'Dark' : 'Projector'}</span>
             </button>
           </div>
         </div>
