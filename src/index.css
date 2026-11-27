@@ -100,44 +100,26 @@ html.projector-mode .glass-nav {
   border-bottom: 1px solid #cbd5e1 !important;
 }
 
-html.projector-mode .bg-slate-900,
-html.projector-mode .bg-slate-900\/85,
-html.projector-mode .bg-slate-900\/80,
-html.projector-mode .bg-slate-900\/75,
-html.projector-mode .bg-slate-900\/70,
-html.projector-mode .bg-slate-900\/60,
+html.projector-mode [class*="bg-slate-900"],
 html.projector-mode .bg-\[\#111827\] {
   background-color: #ffffff !important;
   background-image: none !important;
   box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.12) !important;
 }
 
-html.projector-mode .bg-slate-950,
-html.projector-mode .bg-slate-950\/90,
-html.projector-mode .bg-slate-950\/85,
-html.projector-mode .bg-slate-950\/80,
-html.projector-mode .bg-slate-950\/75,
-html.projector-mode .bg-slate-950\/70,
-html.projector-mode .bg-slate-950\/60,
-html.projector-mode .bg-slate-950\/50,
-html.projector-mode .bg-slate-950\/40 {
+html.projector-mode [class*="bg-slate-950"] {
   background-color: #f1f5f9 !important;
   background-image: none !important;
 }
 
-html.projector-mode .bg-slate-800,
-html.projector-mode .bg-slate-800\/80,
-html.projector-mode .bg-slate-800\/60 {
+html.projector-mode [class*="bg-slate-800"] {
   background-color: #e2e8f0 !important;
 }
 
-html.projector-mode .bg-indigo-950\/80,
-html.projector-mode .bg-indigo-950\/70,
-html.projector-mode .bg-amber-950\/80,
-html.projector-mode .bg-amber-950\/70,
-html.projector-mode .bg-emerald-950\/80,
-html.projector-mode .bg-emerald-950\/40,
-html.projector-mode .bg-blue-950\/80 {
+html.projector-mode [class*="bg-indigo-950"],
+html.projector-mode [class*="bg-amber-950"],
+html.projector-mode [class*="bg-emerald-950"],
+html.projector-mode [class*="bg-blue-950"] {
   background-color: #eef2ff !important;
 }
 
