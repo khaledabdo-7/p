@@ -3,6 +3,7 @@ import { Sparkles, Tv2 } from 'lucide-react';
 import AnalogRoutineClock from './AnalogRoutineClock';
 import HouseSplitCards from './HouseSplitCards';
 import EventSection from './EventSection';
+import GrammarChallenge from './GrammarChallenge';
 
 export default function PresentationSection({ 
   section, 
@@ -70,6 +71,9 @@ export default function PresentationSection({
         {section.id === 'event' && (
           <EventSection highlightVerbs={highlightVerbs} />
         )}
+
+        {/* Present Simple Grammar Challenge for each section */}
+        <GrammarChallenge sectionId={section.id} themeColor={section.themeColor} />
       </div>
     </section>
   );

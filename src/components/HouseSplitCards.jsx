@@ -74,11 +74,13 @@ const rooms = [
     name: '2 Bathrooms',
     icon: Bath,
     accent: 'blue',
-    text: 'My house has a living room, a kitchen, three bedrooms, and two bathrooms.',
+    text: 'We have two clean bathrooms. Each bathroom has a mirror, a sink, and a shower.',
     highlightTokens: [
-      { text: 'My house ', isVerb: false },
-      { text: 'has', isVerb: true, note: "3rd person singular of 'have'" },
-      { text: ' a living room, a kitchen, three bedrooms, and two bathrooms.', isVerb: false }
+      { text: 'We ', isVerb: false },
+      { text: 'have', isVerb: true, note: "Base form with pronoun 'We'" },
+      { text: ' two clean bathrooms. Each bathroom ', isVerb: false },
+      { text: 'has', isVerb: true, note: "3rd person singular with 'Each bathroom'" },
+      { text: ' a mirror, a sink, and a shower.', isVerb: false }
     ]
   }
 ];
